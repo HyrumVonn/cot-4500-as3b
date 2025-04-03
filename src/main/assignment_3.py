@@ -106,6 +106,7 @@ def DecomposeToTriangleMatrices(matrix):
             coeff = - rowCurrent[i] / rowPrev[i]
 
             resultUpper[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+            resultLower[j][i] = -coeff
 
     return resultUpper, resultLower
 
@@ -116,7 +117,7 @@ def GaussianElimination(matrix):
     
     result = LinearSolveTriangleMatrix(matrixModified)
 
-    print(result)
+    print(numpy.array(result))
 
 
 #Problem 2
@@ -151,14 +152,19 @@ def Determinant(matrix):
 
 def LUFactorization(matrix):
     determinant = Determinant(matrix)
-    LMat = []
-    UMat = []
-
     print(determinant)
     print()
-    print(LMat)
+    
+    if(determinant == 0):
+        print("Error: determinant is 0, cannot decompose Matrix")
+        return
+    
+    UMat, LMat = DecomposeToTriangleMatrices(matrix)
+
+
+    print(numpy.array(LMat))
     print()
-    print(UMat)
+    print(numpy.array(UMat))
     print()
 
 def DiagonallyDominant(matrix):

@@ -100,6 +100,7 @@ def DecomposeToTriangleMatrices(matrix):
             coeff = - rowCurrent[i] / rowPrev[i]
 
             resultUpper[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+            resultLower[j][i] = -coeff
 
     return resultUpper, resultLower
 
@@ -114,7 +115,7 @@ def GaussianElimination(matrix):
 
     result = LinearSolveTriangleMatrix(matrixModified)
 
-    print(result)
+    print(numpy.array(result))
 
 
 def Determinant(matrix):
@@ -141,7 +142,7 @@ def Determinant(matrix):
 
             subMatrix.append(rowMatrix)
         
-        print(f"{pow(-1, coeff)} * {topRow[coeff]} * {subMatrix}")
+        #print(f"{pow(-1, coeff)} * {topRow[coeff]} * {subMatrix}")
         sum = sum + (pow(-1, coeff)) * topRow[coeff] * Determinant(subMatrix)
 
     return sum
@@ -157,42 +158,51 @@ def LUFactorization(matrix):
         return
     
     UMat, LMat = DecomposeToTriangleMatrices(matrix)
-    print(LMat)
+
+
+    print(numpy.array(LMat))
     print()
-    print(UMat)
+    print(numpy.array(UMat))
     print()
 
-GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
-print()
+# GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
+# print()
 
-GaussianElimination(matrix=[[1, 2, 1, 7],[2, -1, 1, 4],[3, 1, 1, 10]])
-print()
+# GaussianElimination(matrix=[[1, 2, 1, 7],[2, -1, 1, 4],[3, 1, 1, 10]])
+# print()
 
-GaussianElimination(matrix=[[2, 1, 2, 18],[1, -1, 2, 9],[1, 2, -1, 6]])
-print()
+# GaussianElimination(matrix=[[2, 1, 2, 18],[1, -1, 2, 9],[1, 2, -1, 6]])
+# print()
 
-GaussianElimination([[2,-1,1,6],
-                     [1,3,1,0],
-                     [-1,5,4,-3]])
-print()
+# GaussianElimination([[2,-1,1,6],
+#                      [1,3,1,0],
+#                      [-1,5,4,-3]])
+# print()
 
-GaussianElimination([[2,1,2,18],
-                     [1,-1,2,9],
-                     [1,2,-1,6]])
+# GaussianElimination([[2,1,2,18],
+#                      [1,-1,2,9],
+#                      [1,2,-1,6]])
 
-# LUFactorization([[2,    -1,     3,  0],
-#                  [4,    -2,     7,  0],
-#                  [-3,   -4,     1,  5],
-#                  [6,    -6,     8,  0]])
-# print("\n\n")
+LUFactorization([[2,    -1,     3,  0],
+                 [4,    -2,     7,  0],
+                 [-3,   -4,     1,  5],
+                 [6,    -6,     8,  0]])
+print("\n\n")
 
-# LUFactorization([[1,1,0,3],
-#                  [2,1,-1,1],
-#                  [3,-1,-1,2],
-#                  [-1,2,3,-1]])
-# print("\n\n")
+LUFactorization([[1,1,0,3],
+                 [2,1,-1,1],
+                 [3,-1,-1,2],
+                 [-1,2,3,-1]])
+print("\n\n")
 
-# LUFactorization([[1,0,4,-6],
-#                 [2,5,0,3],
-#                 [-1,2,3,5],
-#                 [2,1,-2,3]])
+LUFactorization([[1,0,4,-6],
+                [2,5,0,3],
+                [-1,2,3,5],
+                [2,1,-2,3]])
+
+print("\n\n")
+
+LUFactorization([[2,4,3,5],
+                 [-4,-7,-5,-8],
+                 [6,8,2,9],
+                 [4,9,-2,14]])
