@@ -77,7 +77,7 @@ def LinearSolveTriangleMatrix(matrix):
 
     return result
 
-def LowerTriangleMatrix(matrix):
+def UpperTriangleMatrix(matrix):
     result = copy.deepcopy(matrix)
     ilength = len(result[0])
 
@@ -106,10 +106,17 @@ def LowerTriangleMatrix(matrix):
 
     return result
 
+def LowerTriangleMatrix(matrix):
+    ilength = len(matrix)
+
+    result = numpy.identity(ilength)
+
+    return result
+
 def GaussianElimination(matrix):
     matrixModified = OrderMatrix(matrix)
     
-    matrixModified = LowerTriangleMatrix(matrixModified)
+    matrixModified = UpperTriangleMatrix(matrixModified)
 
     result = LinearSolveTriangleMatrix(matrixModified)
 
