@@ -108,6 +108,8 @@ def GaussianElimination(matrix):
 
     print(matrixModified)
     print(result)
+
+
 def Determinant(matrix):
     length = len(matrix)
     #base case (when only one element remains)
