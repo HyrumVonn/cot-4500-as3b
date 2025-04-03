@@ -1,7 +1,102 @@
 #Hyrum VonNiederhausern
+import copy
+
+def OrderMatrix(matrixIn):
+    result = copy.deepcopy(matrixIn)
+
+    jlength = len(result)
+
+    for i in range(jlength):
+        if(result[i][0] == 1):
+            #if you find a row that begins with a 1, set that as the first row
+            temp = result[0]
+            result[0] = result[i]
+            result[i] = temp
+            break
+        else:
+            #if we have reached the end, then simply make the first row so that it begins with 1
+            if((i + 1) == jlength):
+                #divide the first row by its first constant
+                origValue = result[0][0]
+                for j in range(len(result[0])):
+                    result[0][j] = (result[0][j]) / origValue
+
+    #output the fixed array
+    return result 
+
+def MatrixAddRows(RowA, RowB, CoefficientB):
+    result = []
+
+    for j in range(len(RowA)):
+        result.append(RowA[j] + (CoefficientB * RowB[j]))
+
+    return result
+
+def LinearSolveTriangleMatrix(matrix):
+    result = []
+
+    for i in range(len(matrix)):
+        result.append(0)
+
+    numXs = len(result)
+
+    #start at the bottom of the matrix: for 
+    # 1 2 |3
+    # 0 1 |2
+    # we want to consider it starting from row
+    # 0 1 |2
+    # 1 2 |3
+    mTemp = list(reversed(matrix))
+
+    for i in range(numXs):
+        # Within each row, consider from the end to the beginning, first. So, previous example
+        # matrix will now be 
+        # 2| 1 0
+        # 3| 2 1
+        row = list(reversed(mTemp[i]))
+        #get the total that this row must sum to
+        sum = row[0]
+
+        for j in range(1, i + 1):
+            value = result[(numXs - 1) - (j - 1)] * row[j]
+            sum = sum - value
+        
+        result[(numXs - 1) - i] = sum / row[i + 1]
+
+    return result
 
 def GaussianElimination(matrix):
-    return 0
+
+    matrixModified = OrderMatrix(matrix)
+
+    ilength = len(matrixModified[0])
+
+    #set all values with j's higher than i to 0
+    for i in range(ilength):
+        jlength = len(matrixModified)
+        for j in range(i + 1, jlength):
+            #Grab the row above it (j - 1). 
+            rowCurrent = matrixModified[j]
+            rowPrev = matrixModified[j - 1]
+
+            if(rowPrev[i] == 0):
+                #if we would divide by 0, grab the next row before that, until we do not
+                #warning; potential to still fault
+                tempJ = j - 1
+                while((rowPrev[i] == 0) and (tempJ >= 0)):
+                    tempJ = tempJ - 1
+                    rowPrev = matrixModified[tempJ]
+
+                if(rowPrev[i] == 0):
+                    print(f"Error! In matrix {matrixModified}, no suitable coefficient to nullify element {i},{j} ({matrixModified[i][j]})")
+
+            coeff = - rowCurrent[i] / rowPrev[i]
+
+            matrixModified[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+
+    result = LinearSolveTriangleMatrix(matrixModified)
+
+    print(result)
 
 def LUFactorization(matrix):
     return 0

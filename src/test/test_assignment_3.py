@@ -39,7 +39,38 @@ def MatrixAddRows(RowA, RowB, CoefficientB):
 
     return result
 
-def Lin
+def LinearSolveTriangleMatrix(matrix):
+    result = []
+
+    for i in range(len(matrix)):
+        result.append(0)
+
+    numXs = len(result)
+
+    #start at the bottom of the matrix: for 
+    # 1 2 |3
+    # 0 1 |2
+    # we want to consider it starting from row
+    # 0 1 |2
+    # 1 2 |3
+    mTemp = list(reversed(matrix))
+
+    for i in range(numXs):
+        # Within each row, consider from the end to the beginning, first. So, previous example
+        # matrix will now be 
+        # 2| 1 0
+        # 3| 2 1
+        row = list(reversed(mTemp[i]))
+        #get the total that this row must sum to
+        sum = row[0]
+
+        for j in range(1, i + 1):
+            value = result[(numXs - 1) - (j - 1)] * row[j]
+            sum = sum - value
+        
+        result[(numXs - 1) - i] = sum / row[i + 1]
+
+    return result
 
 def GaussianElimination(matrix):
     print(matrix)
@@ -73,7 +104,10 @@ def GaussianElimination(matrix):
             matrixModified[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
             #the coefficient will be whatever it takes for matrix[j-1][i] 
 
+    result = LinearSolveTriangleMatrix(matrixModified)
+
     print(matrixModified)
+    print(result)
     print()
 
 GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
