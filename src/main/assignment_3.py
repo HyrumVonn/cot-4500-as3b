@@ -1,5 +1,6 @@
 #Hyrum VonNiederhausern
 import copy
+import numpy
 
 
 #Problem 1
@@ -76,19 +77,17 @@ def LinearSolveTriangleMatrix(matrix):
 
     return result
 
-def GaussianElimination(matrix):
-    #order our matrix, so that the first row starts on 1
-    matrixModified = OrderMatrix(matrix)
-
-    ilength = len(matrixModified[0])
+def LowerTriangleMatrix(matrix):
+    result = copy.deepcopy(matrix)
+    ilength = len(result[0])
 
     #set all values with j's higher than i to 0
     for i in range(ilength):
-        jlength = len(matrixModified)
+        jlength = len(result)
         for j in range(i + 1, jlength):
             #Grab the row above it (j - 1). 
-            rowCurrent = matrixModified[j]
-            rowPrev = matrixModified[j - 1]
+            rowCurrent = result[j]
+            rowPrev = result[j - 1]
 
             if(rowPrev[i] == 0):
                 #if we would divide by 0, grab the next row before that, until we do not
@@ -96,14 +95,21 @@ def GaussianElimination(matrix):
                 tempJ = j - 1
                 while((rowPrev[i] == 0) and (tempJ >= 0)):
                     tempJ = tempJ - 1
-                    rowPrev = matrixModified[tempJ]
+                    rowPrev = result[tempJ]
 
                 if(rowPrev[i] == 0):
-                    print(f"Error! In matrix {matrixModified}, no suitable coefficient to nullify element {i},{j} ({matrixModified[i][j]})")
+                    print(f"Error! In matrix {matrix}, no suitable coefficient to nullify element {i},{j} ({result[i][j]})")
 
             coeff = - rowCurrent[i] / rowPrev[i]
 
-            matrixModified[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+            result[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+
+    return result
+
+def GaussianElimination(matrix):
+    matrixModified = OrderMatrix(matrix)
+    
+    matrixModified = LowerTriangleMatrix(matrixModified)
 
     result = LinearSolveTriangleMatrix(matrixModified)
 

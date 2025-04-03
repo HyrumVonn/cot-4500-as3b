@@ -72,21 +72,17 @@ def LinearSolveTriangleMatrix(matrix):
 
     return result
 
-def GaussianElimination(matrix):
-    print(matrix)
-
-    matrixModified = OrderMatrix(matrix)
-    print(matrixModified)
-
-    ilength = len(matrixModified[0])
+def LowerTriangleMatrix(matrix):
+    result = copy.deepcopy(matrix)
+    ilength = len(result[0])
 
     #set all values with j's higher than i to 0
     for i in range(ilength):
-        jlength = len(matrixModified)
+        jlength = len(result)
         for j in range(i + 1, jlength):
             #Grab the row above it (j - 1). 
-            rowCurrent = matrixModified[j]
-            rowPrev = matrixModified[j - 1]
+            rowCurrent = result[j]
+            rowPrev = result[j - 1]
 
             if(rowPrev[i] == 0):
                 #if we would divide by 0, grab the next row before that, until we do not
@@ -94,19 +90,33 @@ def GaussianElimination(matrix):
                 tempJ = j - 1
                 while((rowPrev[i] == 0) and (tempJ >= 0)):
                     tempJ = tempJ - 1
-                    rowPrev = matrixModified[tempJ]
+                    rowPrev = result[tempJ]
 
                 if(rowPrev[i] == 0):
-                    print(f"Error! In matrix {matrixModified}, no suitable coefficient to nullify element {i},{j} ({matrixModified[i][j]})")
+                    print(f"Error! In matrix {matrix}, no suitable coefficient to nullify element {i},{j} ({result[i][j]})")
 
             coeff = - rowCurrent[i] / rowPrev[i]
 
-            matrixModified[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
-            #the coefficient will be whatever it takes for matrix[j-1][i] 
+            result[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+
+    return result
+
+def UpperTriangleMatrix(matrix):
+    result = []
+
+    return result
+
+def GaussianElimination(matrix):
+    print(matrix)
+
+    matrixModified = OrderMatrix(matrix)
+    print(matrixModified)
+
+    matrixModified = LowerTriangleMatrix(matrixModified)
+    print(matrixModified)
 
     result = LinearSolveTriangleMatrix(matrixModified)
 
-    print(matrixModified)
     print(result)
 
 
@@ -142,13 +152,18 @@ def Determinant(matrix):
 
 def LUFactorization(matrix):
     determinant = Determinant(matrix)
-    LMat = []
-    UMat = []
-
     print(determinant)
     print()
+    
+    if(determinant == 0):
+        print("Error: determinant is 0, cannot decompose Matrix")
+        return
+    
+    LMat = LowerTriangleMatrix(matrix)
     print(LMat)
     print()
+
+    UMat = UpperTriangleMatrix(matrix)
     print(UMat)
     print()
 
