@@ -167,8 +167,31 @@ def LUFactorization(matrix):
     print(numpy.array(UMat))
     print()
 
+def SumRowMagnitude(row):
+    result = 0
+
+    length = len(row)
+
+    for i in range(length):
+        result = result + abs(row[i])
+
+    return result
+
 def DiagonallyDominant(matrix):
-    return True
+    length = len(matrix)
+    result = True
+
+    for i in range(length):
+        mag = abs(matrix[i][i])
+
+        #must subtract the magnitude of the diagonal
+        #from the total sum of magnitudes in the row
+        if (mag < (SumRowMagnitude(matrix[i]) - mag)):
+            #if all are >=, it is true. Therefore, if
+            #any are <, it is false
+            result = False
+
+    print(result)
 
 def PositiveDefinite(matrix):
     return True

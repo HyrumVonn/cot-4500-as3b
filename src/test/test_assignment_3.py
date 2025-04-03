@@ -165,6 +165,37 @@ def LUFactorization(matrix):
     print(numpy.array(UMat))
     print()
 
+def SumRowMagnitude(row):
+    result = 0
+
+    length = len(row)
+
+    for i in range(length):
+        result = result + abs(row[i])
+
+    return result
+
+def DiagonallyDominant(matrix):
+    print(numpy.array(matrix))
+
+    length = len(matrix)
+    result = True
+
+    for i in range(length):
+        mag = abs(matrix[i][i])
+
+        #must subtract the magnitude of the diagonal
+        #from the total sum of magnitudes in the row
+        if (mag < (SumRowMagnitude(matrix[i]) - mag)):
+            #if all are >=, it is true. Therefore, if
+            #any are <, it is false
+            result = False
+
+    print(result)
+
+def PositiveDefinite(matrix):
+    return True
+
 # GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
 # print()
 
@@ -183,26 +214,50 @@ def LUFactorization(matrix):
 #                      [1,-1,2,9],
 #                      [1,2,-1,6]])
 
-LUFactorization([[2,    -1,     3,  0],
-                 [4,    -2,     7,  0],
-                 [-3,   -4,     1,  5],
-                 [6,    -6,     8,  0]])
-print("\n\n")
+# LUFactorization([[2,    -1,     3,  0],
+#                  [4,    -2,     7,  0],
+#                  [-3,   -4,     1,  5],
+#                  [6,    -6,     8,  0]])
+# print("\n\n")
 
-LUFactorization([[1,1,0,3],
-                 [2,1,-1,1],
-                 [3,-1,-1,2],
-                 [-1,2,3,-1]])
-print("\n\n")
+# LUFactorization([[1,1,0,3],
+#                  [2,1,-1,1],
+#                  [3,-1,-1,2],
+#                  [-1,2,3,-1]])
+# print("\n\n")
 
-LUFactorization([[1,0,4,-6],
-                [2,5,0,3],
-                [-1,2,3,5],
-                [2,1,-2,3]])
+# LUFactorization([[1,0,4,-6],
+#                 [2,5,0,3],
+#                 [-1,2,3,5],
+#                 [2,1,-2,3]])
 
-print("\n\n")
+# print("\n\n")
 
-LUFactorization([[2,4,3,5],
-                 [-4,-7,-5,-8],
-                 [6,8,2,9],
-                 [4,9,-2,14]])
+# LUFactorization([[2,4,3,5],
+#                  [-4,-7,-5,-8],
+#                  [6,8,2,9],
+#                  [4,9,-2,14]])
+
+DiagonallyDominant([[4,1,2],
+                    [1,3,1],
+                    [0,1,2]])
+
+DiagonallyDominant([[1,-4,2],
+                    [-2,1,3],
+                    [2,6,8]])
+
+DiagonallyDominant([[1,6,4],
+                    [2,4,-1],
+                    [-1,2,5]])
+
+DiagonallyDominant([[9,0,5,2,1],
+                    [3,9,1,2,1],
+                    [0,1,7,2,3],
+                    [4,2,3,12,2],
+                    [3,2,4,0,8]])
+
+print()
+
+# PositiveDefinite([[2,2,1],
+#                   [2,3,0],
+#                   [1,0,2]])
