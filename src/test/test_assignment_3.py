@@ -72,17 +72,19 @@ def LinearSolveTriangleMatrix(matrix):
 
     return result
 
-def UpperTriangleMatrix(matrix):
-    result = copy.deepcopy(matrix)
-    ilength = len(result[0])
+def DecomposeToTriangleMatrices(matrix):
+    resultUpper = copy.deepcopy(matrix)
+    ilength = len(resultUpper[0])
+
+    resultLower = numpy.identity(len(matrix))
 
     #set all values with j's higher than i to 0
     for i in range(ilength):
-        jlength = len(result)
+        jlength = len(resultUpper)
         for j in range(i + 1, jlength):
             #Grab the row above it (j - 1). 
-            rowCurrent = result[j]
-            rowPrev = result[j - 1]
+            rowCurrent = resultUpper[j]
+            rowPrev = resultUpper[j - 1]
 
             if(rowPrev[i] == 0):
                 #if we would divide by 0, grab the next row before that, until we do not
@@ -90,23 +92,16 @@ def UpperTriangleMatrix(matrix):
                 tempJ = j - 1
                 while((rowPrev[i] == 0) and (tempJ >= 0)):
                     tempJ = tempJ - 1
-                    rowPrev = result[tempJ]
+                    rowPrev = resultUpper[tempJ]
 
                 if(rowPrev[i] == 0):
-                    print(f"Error! In matrix {matrix}, no suitable coefficient to nullify element {i},{j} ({result[i][j]})")
+                    print(f"Error! In matrix {matrix}, no suitable coefficient to nullify element {i},{j} ({resultUpper[i][j]})")
 
             coeff = - rowCurrent[i] / rowPrev[i]
 
-            result[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+            resultUpper[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
 
-    return result
-
-def LowerTriangleMatrix(matrix):
-    ilength = len(matrix)
-
-    result = numpy.identity(ilength)
-
-    return result
+    return resultUpper, resultLower
 
 def GaussianElimination(matrix):
     print(matrix)
@@ -114,7 +109,7 @@ def GaussianElimination(matrix):
     matrixModified = OrderMatrix(matrix)
     print(matrixModified)
 
-    matrixModified = UpperTriangleMatrix(matrixModified)
+    matrixModified, lowTriangleMat = DecomposeToTriangleMatrices(matrixModified)
     print(matrixModified)
 
     result = LinearSolveTriangleMatrix(matrixModified)
@@ -161,45 +156,43 @@ def LUFactorization(matrix):
         print("Error: determinant is 0, cannot decompose Matrix")
         return
     
-    LMat = LowerTriangleMatrix(matrix)
+    UMat, LMat = DecomposeToTriangleMatrices(matrix)
     print(LMat)
     print()
-
-    UMat = UpperTriangleMatrix(matrix)
     print(UMat)
     print()
 
-# GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
-# print()
+GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
+print()
 
-# GaussianElimination(matrix=[[1, 2, 1, 7],[2, -1, 1, 4],[3, 1, 1, 10]])
-# print()
+GaussianElimination(matrix=[[1, 2, 1, 7],[2, -1, 1, 4],[3, 1, 1, 10]])
+print()
 
-# GaussianElimination(matrix=[[2, 1, 2, 18],[1, -1, 2, 9],[1, 2, -1, 6]])
-# print()
+GaussianElimination(matrix=[[2, 1, 2, 18],[1, -1, 2, 9],[1, 2, -1, 6]])
+print()
 
-# GaussianElimination([[2,-1,1,6],
-#                      [1,3,1,0],
-#                      [-1,5,4,-3]])
-# print()
+GaussianElimination([[2,-1,1,6],
+                     [1,3,1,0],
+                     [-1,5,4,-3]])
+print()
 
-# GaussianElimination([[2,1,2,18],
-#                      [1,-1,2,9],
-#                      [1,2,-1,6]])
+GaussianElimination([[2,1,2,18],
+                     [1,-1,2,9],
+                     [1,2,-1,6]])
 
-LUFactorization([[2,    -1,     3,  0],
-                 [4,    -2,     7,  0],
-                 [-3,   -4,     1,  5],
-                 [6,    -6,     8,  0]])
-print("\n\n")
+# LUFactorization([[2,    -1,     3,  0],
+#                  [4,    -2,     7,  0],
+#                  [-3,   -4,     1,  5],
+#                  [6,    -6,     8,  0]])
+# print("\n\n")
 
-LUFactorization([[1,1,0,3],
-                 [2,1,-1,1],
-                 [3,-1,-1,2],
-                 [-1,2,3,-1]])
-print("\n\n")
+# LUFactorization([[1,1,0,3],
+#                  [2,1,-1,1],
+#                  [3,-1,-1,2],
+#                  [-1,2,3,-1]])
+# print("\n\n")
 
-LUFactorization([[1,0,4,-6],
-                [2,5,0,3],
-                [-1,2,3,5],
-                [2,1,-2,3]])
+# LUFactorization([[1,0,4,-6],
+#                 [2,5,0,3],
+#                 [-1,2,3,5],
+#                 [2,1,-2,3]])

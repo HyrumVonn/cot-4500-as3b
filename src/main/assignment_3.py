@@ -77,17 +77,20 @@ def LinearSolveTriangleMatrix(matrix):
 
     return result
 
-def UpperTriangleMatrix(matrix):
-    result = copy.deepcopy(matrix)
-    ilength = len(result[0])
+
+def DecomposeToTriangleMatrices(matrix):
+    resultUpper = copy.deepcopy(matrix)
+    ilength = len(resultUpper[0])
+
+    resultLower = numpy.identity(len(matrix))
 
     #set all values with j's higher than i to 0
     for i in range(ilength):
-        jlength = len(result)
+        jlength = len(resultUpper)
         for j in range(i + 1, jlength):
             #Grab the row above it (j - 1). 
-            rowCurrent = result[j]
-            rowPrev = result[j - 1]
+            rowCurrent = resultUpper[j]
+            rowPrev = resultUpper[j - 1]
 
             if(rowPrev[i] == 0):
                 #if we would divide by 0, grab the next row before that, until we do not
@@ -95,29 +98,22 @@ def UpperTriangleMatrix(matrix):
                 tempJ = j - 1
                 while((rowPrev[i] == 0) and (tempJ >= 0)):
                     tempJ = tempJ - 1
-                    rowPrev = result[tempJ]
+                    rowPrev = resultUpper[tempJ]
 
                 if(rowPrev[i] == 0):
-                    print(f"Error! In matrix {matrix}, no suitable coefficient to nullify element {i},{j} ({result[i][j]})")
+                    print(f"Error! In matrix {matrix}, no suitable coefficient to nullify element {i},{j} ({resultUpper[i][j]})")
 
             coeff = - rowCurrent[i] / rowPrev[i]
 
-            result[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
+            resultUpper[j] = MatrixAddRows(rowCurrent, rowPrev, coeff)
 
-    return result
-
-def LowerTriangleMatrix(matrix):
-    ilength = len(matrix)
-
-    result = numpy.identity(ilength)
-
-    return result
+    return resultUpper, resultLower
 
 def GaussianElimination(matrix):
     matrixModified = OrderMatrix(matrix)
     
-    matrixModified = UpperTriangleMatrix(matrixModified)
-
+    matrixModified, lowTriangleMat = DecomposeToTriangleMatrices(matrixModified)
+    
     result = LinearSolveTriangleMatrix(matrixModified)
 
     print(result)
