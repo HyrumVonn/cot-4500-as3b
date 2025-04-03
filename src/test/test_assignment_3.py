@@ -108,10 +108,79 @@ def GaussianElimination(matrix):
 
     print(matrixModified)
     print(result)
+def Determinant(matrix):
+    length = len(matrix)
+    #base case (when only one element remains)
+    if(length == 1):
+        return matrix[0][0]
+    
+    #when a 2x2 matrix remains
+    if(length == 2):
+        return matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]
+    
+    sum = 0
+    topRow = matrix[0]
+    for coeff in range(length):
+        subMatrix = []
+        #coefficients will always be the top row, so can safely start the submatrix on row 1
+        for i in range(1, length):
+            rowMatrix = []
+            for j in range(length):
+                if (j == coeff):
+                    continue
+                rowMatrix.append(matrix[i][j])
+
+            subMatrix.append(rowMatrix)
+        
+        print(f"{pow(-1, coeff)} * {topRow[coeff]} * {subMatrix}")
+        sum = sum + (pow(-1, coeff)) * topRow[coeff] * Determinant(subMatrix)
+
+    return sum
+
+
+def LUFactorization(matrix):
+    determinant = Determinant(matrix)
+    LMat = []
+    UMat = []
+
+    print(determinant)
+    print()
+    print(LMat)
+    print()
+    print(UMat)
     print()
 
-GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
+# GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
+# print()
 
-GaussianElimination(matrix=[[1, 2, 1, 7],[2, -1, 1, 4],[3, 1, 1, 10]])
+# GaussianElimination(matrix=[[1, 2, 1, 7],[2, -1, 1, 4],[3, 1, 1, 10]])
+# print()
 
-GaussianElimination(matrix=[[2, 1, 2, 18],[1, -1, 2, 9],[1, 2, -1, 6]])
+# GaussianElimination(matrix=[[2, 1, 2, 18],[1, -1, 2, 9],[1, 2, -1, 6]])
+# print()
+
+# GaussianElimination([[2,-1,1,6],
+#                      [1,3,1,0],
+#                      [-1,5,4,-3]])
+# print()
+
+# GaussianElimination([[2,1,2,18],
+#                      [1,-1,2,9],
+#                      [1,2,-1,6]])
+
+LUFactorization([[2,    -1,     3,  0],
+                 [4,    -2,     7,  0],
+                 [-3,   -4,     1,  5],
+                 [6,    -6,     8,  0]])
+print("\n\n")
+
+LUFactorization([[1,1,0,3],
+                 [2,1,-1,1],
+                 [3,-1,-1,2],
+                 [-1,2,3,-1]])
+print("\n\n")
+
+LUFactorization([[1,0,4,-6],
+                [2,5,0,3],
+                [-1,2,3,5],
+                [2,1,-2,3]])
