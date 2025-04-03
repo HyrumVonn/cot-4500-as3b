@@ -38,6 +38,8 @@ def LinearSolveTriangleMatrix(matrix):
     for i in range(len(matrix)):
         result.append(0)
 
+    #A general number to be used; length of the array of variables that we output; number of rows 
+    #in the input matrix
     numXs = len(result)
 
     #start at the bottom of the matrix: for 
@@ -57,16 +59,23 @@ def LinearSolveTriangleMatrix(matrix):
         #get the total that this row must sum to
         sum = row[0]
 
+        #skipping over the sum column, add up each variable we've already calculated with its corre-
+        #-sponding coefficient on this row, and remove that from sum
         for j in range(1, i + 1):
+            #j is a bottom up indexer when considering the columns in our given row
+            #j is also a top down indexer when it comes to accessing calculated variables  
+            #(hence, why we subtract it from number of Xs to get a given variable)
             value = result[(numXs - 1) - (j - 1)] * row[j]
             sum = sum - value
         
+        #then, what remains of the sum, divide it by the furthermost coefficient in the row, and
+        #that must be the variable for this row; save it into our array of variables
         result[(numXs - 1) - i] = sum / row[i + 1]
 
     return result
 
 def GaussianElimination(matrix):
-
+    #order our matrix, so that the first row starts on 1
     matrixModified = OrderMatrix(matrix)
 
     ilength = len(matrixModified[0])
