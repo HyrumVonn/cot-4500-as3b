@@ -193,8 +193,56 @@ def DiagonallyDominant(matrix):
 
     print(result)
 
-def PositiveDefinite(matrix):
+
+def InvertMatrix(matrix):
+    result = []
+
+    length = len(matrix)
+
+    for i in range(length):
+        row = []
+        for j in range(length):
+            row.append(0)
+        result.append(row)
+
+    for i in range(length):
+        for j in range(length):
+            result[i][j] = matrix[j][i]
+
+    return result
+
+def PositiveDeterminants(matrix):
+    #make submatrices for each square, until you reach total
+    #if any of them are not, positive, then return false
+    length = len(matrix)
+
+    for size in range(length):
+        submatrix = []
+        for i in range(size + 1):
+            row = []
+            for j in range(size + 1):
+                row.append(matrix[i][j])
+            submatrix.append(row)
+        
+        Det = Determinant(submatrix)
+
+        if(Det <= 0):
+            return False
+
     return True
+
+def PositiveDefinite(matrix):
+    result = True
+
+    inverted = InvertMatrix(matrix)
+
+    if(not(numpy.array_equal(matrix, inverted))):
+        result = False
+
+    if(not PositiveDeterminants(inverted)):
+        result = False
+
+    print(result)
 
 
 GaussianElimination([[2,-1,1,6],

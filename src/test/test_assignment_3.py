@@ -193,8 +193,61 @@ def DiagonallyDominant(matrix):
 
     print(result)
 
-def PositiveDefinite(matrix):
+def InvertMatrix(matrix):
+    print(numpy.array(matrix))
+    result = []
+
+    length = len(matrix)
+
+    for i in range(length):
+        row = []
+        for j in range(length):
+            row.append(0)
+        result.append(row)
+
+    for i in range(length):
+        for j in range(length):
+            result[i][j] = matrix[j][i]
+
+    print(numpy.array(result))
+
+    return result
+
+def PositiveDeterminants(matrix):
+    #make submatrices for each square, until you reach total
+    #if any of them are not, positive, then return false
+    length = len(matrix)
+
+    for size in range(length):
+        submatrix = []
+        for i in range(size + 1):
+            row = []
+            for j in range(size + 1):
+                row.append(matrix[i][j])
+            submatrix.append(row)
+        
+        Det = Determinant(submatrix)
+
+        print(f"Determinant of \n{numpy.array(submatrix)}\n{Det}")
+        if(Det <= 0):
+            print(f"Determinant {Det} was NOT greater than {0}")
+            return False
+
     return True
+
+def PositiveDefinite(matrix):
+    result = True
+
+    inverted = InvertMatrix(matrix)
+
+    if(not(numpy.array_equal(matrix, inverted))):
+        print(f"Matrices \n{numpy.array(matrix)}and\n{numpy.array(inverted)} \nare not equal")
+        result = False
+
+    if(not PositiveDeterminants(inverted)):
+        result = False
+
+    print(result)
 
 # GaussianElimination(matrix=[[2, -1, 7],[-1, 1, 1]])
 # print()
@@ -238,26 +291,39 @@ def PositiveDefinite(matrix):
 #                  [6,8,2,9],
 #                  [4,9,-2,14]])
 
-DiagonallyDominant([[4,1,2],
-                    [1,3,1],
-                    [0,1,2]])
+# DiagonallyDominant([[4,1,2],
+#                     [1,3,1],
+#                     [0,1,2]])
 
-DiagonallyDominant([[1,-4,2],
-                    [-2,1,3],
-                    [2,6,8]])
+# DiagonallyDominant([[1,-4,2],
+#                     [-2,1,3],
+#                     [2,6,8]])
 
-DiagonallyDominant([[1,6,4],
-                    [2,4,-1],
-                    [-1,2,5]])
+# DiagonallyDominant([[1,6,4],
+#                     [2,4,-1],
+#                     [-1,2,5]])
 
-DiagonallyDominant([[9,0,5,2,1],
-                    [3,9,1,2,1],
-                    [0,1,7,2,3],
-                    [4,2,3,12,2],
-                    [3,2,4,0,8]])
+# DiagonallyDominant([[9,0,5,2,1],
+#                     [3,9,1,2,1],
+#                     [0,1,7,2,3],
+#                     [4,2,3,12,2],
+#                     [3,2,4,0,8]])
 
-print()
+# print()
 
-# PositiveDefinite([[2,2,1],
-#                   [2,3,0],
-#                   [1,0,2]])
+PositiveDefinite([[2,2,1],
+                  [2,3,0],
+                  [1,0,2]])
+
+PositiveDefinite([[2,-2,0],
+                  [-2,1,-2],
+                  [0,-2,1]])
+
+PositiveDefinite([[2,2,-2],
+                  [2,5,-4],
+                  [-2,-4,5]])
+
+
+PositiveDefinite([[2,2,0],
+                  [2,0,-4],
+                  [-2,-4,5]])
